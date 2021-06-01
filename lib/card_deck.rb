@@ -1,11 +1,17 @@
 require('playing_card')
 
 class CardDeck
-  def initialize
+  def initialize(custom_cards=nil)
     @card_list = []
-    PlayingCard::SUITS.each do |suit|
-      PlayingCard::RANKS.each do |rank|
-        @card_list.push(PlayingCard.new(rank, suit))
+    if !custom_cards
+      PlayingCard::SUITS.each do |suit|
+        PlayingCard::RANKS.each do |rank|
+          @card_list.push(PlayingCard.new(rank, suit))
+        end
+      end
+    else
+      custom_cards.each do |i|
+        @card_list.push(i)
       end
     end
   end
@@ -14,10 +20,14 @@ class CardDeck
     @card_list.length
   end
 
-  def draw
-    returned_card = @card_list.shift
+  def draw(count = nil)
+    if(!count || count == 1)
+      returned_cards = @card_list.shift
+    else
+      returned_cards = @card_list.shift(count)
+    end
     @cards_left = @card_list.length
-    returned_card
+    returned_cards
   end
 
   def shuffle(seed=nil)
@@ -35,4 +45,5 @@ class CardDeck
   def add_card(new_card)
     @card_list.push(new_card)
   end
+
 end

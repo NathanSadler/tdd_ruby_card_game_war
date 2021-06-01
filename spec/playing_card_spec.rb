@@ -33,9 +33,15 @@ describe 'PlayingCard' do
     it('returns true if both cards have the same rank and suit') do
       expect(@card_a == PlayingCard.new("A", "C")).to eq(true)
     end
-    it('returns true if the cards have different ranks') do
-      expect(@card_a == PlayingCard.new("4", "D")).to eq(false)
+    it('is false if the cards have different ranks or suits') do
+      expect(@card_a == PlayingCard.new("A", "S")).to eq(false)
+      expect(@card_a == PlayingCard.new("J", "C")).to eq(false)
     end
+  end
+
+  it('gets a description of the card') do
+    card = PlayingCard.new("Q", "H")
+    expect(card.description).to eq("Queen of Hearts")
   end
 
 end

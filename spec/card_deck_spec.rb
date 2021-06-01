@@ -10,8 +10,13 @@ describe 'CardDeck' do
 
   it 'should draw the top card' do
     card = deck.draw
-    expect(card).to eq(PlayingCard.new("A", "S"))
+    expect(card).to eq(PlayingCard.new("A", "C"))
     expect(deck.cards_left).to eq 51
+  end
+
+  it 'can take multiple cards from the top' do
+    cards = deck.draw(2)
+    expect(cards).to eq([PlayingCard.new("A", "C"), PlayingCard.new("2", "C")])
   end
 
   it 'creates an unshuffled deck of cards' do
@@ -19,6 +24,12 @@ describe 'CardDeck' do
       PlayingCard.new("3", "C")].each do |card|
         expect(deck.draw).to eq(card)
       end
+  end
+
+  it 'creates a deck with specific cards if cards are specified' do
+    custom_cards = [PlayingCard.new("3", "S"), PlayingCard.new("4", "S")]
+    test_deck = CardDeck.new(custom_cards)
+    expect(test_deck.draw).to eq(PlayingCard.new("3", "S"))
   end
 
   it 'shuffles a deck of cards' do

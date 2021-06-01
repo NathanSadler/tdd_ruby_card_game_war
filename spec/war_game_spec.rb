@@ -2,7 +2,7 @@ require_relative '../lib/war_game'
 require_relative '../lib/playing_card'
 
 describe 'WarGame' do
-  let(:game) {WarGame.new}
+  let(:game) {WarGame.new("John Doe", "Jane Doh")}
   it('creates two players with different 26-card decks') do
     player1 = game.player1
     player2 = game.player2
@@ -40,5 +40,27 @@ describe 'WarGame' do
     end
   end
 
-  
+  describe('#play_round') do
+    before(:each) do
+      @test_game = WarGame.new("John Doe", "Jane Doe")
+      # Clears all cards from both players
+      player1_card_count = @test_game.player1.card_count
+      player2_card_count = @test_game.player2.card_count
+      player1_card_count.times {@test_game.player1.draw_card}
+      player2_card_count.times {@test_game.player2.draw_card}
+    end
+
+    it('gives the player with a higher rank card the cards at play') do
+      king_card = PlayingCard.new("K", "S")
+      @test_game.player1.take_card(king_card)
+      two_card = PlayingCard.new("2", "S")
+      @test_game.player2.take_card(two_card)
+      @test_game.play_round
+      expect(@test_game.player1.card_count).to(eq(2))
+      expect(@test_game.player2.card_count).to(eq(0))
+      expect(@test_game.player1.draw_card(2)).to eq([king_card, two_card])
+    end
+  end
+
+
 end

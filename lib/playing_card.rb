@@ -16,8 +16,27 @@ class PlayingCard
   end
 
   def ==(other_card)
-    return @rank == other_card.rank
+    return (@rank == other_card.rank) && (@suit == other_card.suit)
   end
 
+  def description
+    rank_names =
+    {
+      "A" => "Ace",
+      "J" => "Jack",
+      "Q" => "Queen",
+      "K" => "King"
+    }
 
+    suit_names =
+    {
+      "D" => "Diamonds",
+      "S" => "Spades",
+      "C" => "Clubs",
+      "H" => "Hearts"
+    }
+    rank = rank_names[@rank] || @rank
+    suit = suit_names[@suit]
+    return "#{rank} of #{suit}"
+  end
 end

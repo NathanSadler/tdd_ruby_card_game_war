@@ -13,8 +13,8 @@
      @player_deck.add_card(new_card)
    end
 
-   def draw_card
-     @player_deck.draw
+   def draw_card(card_count=1)
+     @player_deck.draw(card_count)
    end
 
    def name
