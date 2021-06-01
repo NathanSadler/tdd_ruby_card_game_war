@@ -15,4 +15,17 @@ describe 'PlayingCard' do
     card = PlayingCard.new("5")
     expect(card.rank).to eq("5")
   end
+
+  describe('#==') do
+    before(:all) do
+      @card_a = PlayingCard.new("A")
+    end
+    it('returns true if both cards have the same rank') do
+      expect(@card_a == PlayingCard.new("A")).to eq(true)
+    end
+    it('returns true if the cards have different ranks') do
+      expect(@card_a == PlayingCard.new("4")).to eq(false)
+    end
+  end
+
 end

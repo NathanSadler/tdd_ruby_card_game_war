@@ -9,5 +9,9 @@ class PlayingCard
     @rank
   end
 
+  def ==(other_card)
+    return @rank == other_card.rank
+  end
+
 
 end
