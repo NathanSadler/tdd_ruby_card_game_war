@@ -18,4 +18,6 @@ describe 'WarPlayer' do
     player.take_card(PlayingCard.new("4", "H"))
     expect(player.draw_card).to eq(PlayingCard.new("4", "H"))
   end
+
+  
 end

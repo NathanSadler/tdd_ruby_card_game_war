@@ -14,7 +14,6 @@ class CardDeck
     @card_list.length
   end
 
-
   def draw
     returned_card = @card_list.shift
     @cards_left = @card_list.length
