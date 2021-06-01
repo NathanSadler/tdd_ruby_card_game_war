@@ -8,24 +8,41 @@ describe 'CardDeck' do
     expect(deck.cards_left).to eq 52
   end
 
-  it 'should deal the top card' do
-    card = deck.deal
-    expect(card).to eq(PlayingCard.new("A"))
+  it 'should draw the top card' do
+    card = deck.draw
+    expect(card).to eq(PlayingCard.new("A", "S"))
     expect(deck.cards_left).to eq 51
   end
 
   it 'creates an unshuffled deck of cards' do
-    [PlayingCard.new("A"), PlayingCard.new("2"),
-      PlayingCard.new("3")].each do |card|
-        expect(deck.deal).to eq(card)
+    [PlayingCard.new("A", "C"), PlayingCard.new("2", "C"),
+      PlayingCard.new("3", "C")].each do |card|
+        expect(deck.draw).to eq(card)
       end
   end
 
   it 'shuffles a deck of cards' do
-    # With a seed of 1, the first card's rank should be 6
-    deck.shuffle(1)
-    first_card = deck.deal
-    expect(first_card).to_not eq(PlayingCard.new("A"))
-    expect(first_card).to eq(PlayingCard.new("6"))
+    expect(deck.shuffle.eql?(CardDeck.new.shuffle)).to eq(false), "there is a chance this is a false negative. Try again"
+  end
+
+  describe('.is_empty?') do
+    it('is false if there are cards in the deck') do
+      expect(CardDeck.new.is_empty?).to eq(false)
+    end
+    it('is true if there are no cards in the deck') do
+      deck_to_empty = CardDeck.new
+      52.times {deck_to_empty.draw}
+    end
+  end
+
+  it 'removes all cards from itself' do
+    deck.clear
+    expect(deck.is_empty?).to eq(true)
+  end
+
+  it 'adds a card to the bottom of the deck' do
+    deck.add_card(PlayingCard.new("6", "S"))
+    52.times {deck.draw}
+    expect(deck.draw.rank).to eq("6")
   end
 end
