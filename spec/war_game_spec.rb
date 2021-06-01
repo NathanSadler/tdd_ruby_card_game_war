@@ -39,4 +39,6 @@ describe 'WarGame' do
       expect(game.winner).to eq(game.player1)
     end
   end
+
+  
 end

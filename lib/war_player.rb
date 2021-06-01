@@ -1,7 +1,8 @@
  class WarPlayer
-   def initialize
+   def initialize(name = nil)
      @player_deck = CardDeck.new
      @player_deck.clear
+     @name = name
    end
 
    def card_count
@@ -16,5 +17,8 @@
      @player_deck.draw
    end
 
-   
+   def name
+     @name
+   end
+
  end
