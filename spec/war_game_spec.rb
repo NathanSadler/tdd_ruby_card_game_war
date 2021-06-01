@@ -28,4 +28,15 @@ describe 'WarGame' do
       expect(WarGame.compare_cards(PlayingCard.new("A", "S"), @card_a) < 0).to eq(true)
     end
   end
+
+  describe('#winner') do
+    it('is nil if both players have at least one card') do
+      expect(game.winner.nil?).to eq(true)
+    end
+    it('returns the player with more than one card if one of the players has' +
+    ' no more cards') do
+      game.player2.card_count.times {game.player2.draw_card}
+      expect(game.winner).to eq(game.player1)
+    end
+  end
 end
