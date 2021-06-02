@@ -23,6 +23,8 @@ class WarGame
     end
   end
 
+# Assigns a numeric value to each card rank and returns the result of subtracting
+# the first card's value from the second card's value
   def self.get_round_results(winning_player, winner_active_card, cards_at_stake)
     formatted_cards_at_stake = cards_at_stake.map(&:description)
     if cards_at_stake.length == 2
@@ -77,19 +79,17 @@ class WarGame
         round_winner = player2
         round_winner_card = p2_active_card
       else
-        # Adds cards from a war to cards_at_stake
-        drawn_cards = []
-        if self.player1.card_count >= 4
-          self.player1.draw_card(3).map {|card| drawn_cards.push(card)}
-        elsif self.player1.card_count > 0
-          (self.player1.card_count - 1).times {drawn_cards.push(player1.draw_card)}
+        # Adds cards from a war to cards_at_stake. If a player only has one card,
+        # it doesn't draw one from them because that card will be their next
+        # active card
+        3.times do
+          [player1, player2].each do |player|
+            if player.card_count > 1
+              cards_at_stake.push(player.draw_card)
+            end
+          end
         end
-        if self.player2.card_count >= 4
-          self.player2.draw_card(3).map {|card| drawn_cards.push(card)}
-        elsif self.player2.card_count > 0
-          (self.player2.card_count - 1).times {|card| drawn_cards.push(player2.draw_card)}
-        end
-        drawn_cards.map {|card| cards_at_stake.push(card)}
+
       end
     end
     # Prints which player won what cards this round
