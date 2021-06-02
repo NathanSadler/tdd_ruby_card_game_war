@@ -37,7 +37,7 @@ class WarGame
     "#{winner_active_card.description}.")
   end
 
-  def self.compare_cards(card_1, card_2)
+  def self.subtract_card_values(card_1, card_2)
     values =
     {
       "A" => 1,
@@ -68,11 +68,11 @@ class WarGame
       # Randomizes order of cards_at_stake to avoid infinite loops... somehow
       cards_at_stake.shuffle!
 
-      if WarGame.compare_cards(p1_active_card, p2_active_card) > 0
+      if WarGame.subtract_card_values(p1_active_card, p2_active_card) > 0
         cards_at_stake.map {|card| self.player1.take_card(card)}
         round_winner = player1
         round_winner_card = p1_active_card
-      elsif WarGame.compare_cards(p1_active_card, p2_active_card) < 0
+      elsif WarGame.subtract_card_values(p1_active_card, p2_active_card) < 0
         cards_at_stake.map {|card| self.player2.take_card(card)}
         round_winner = player2
         round_winner_card = p2_active_card
