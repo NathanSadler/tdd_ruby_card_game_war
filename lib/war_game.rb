@@ -23,6 +23,20 @@ class WarGame
     end
   end
 
+  def self.get_round_results(winning_player, winner_active_card, cards_at_stake)
+    formatted_cards_at_stake = cards_at_stake.map(&:description)
+    if cards_at_stake.length == 2
+      spoils_of_war = formatted_cards_at_stake.join(" and ")
+    else
+      # Add 'and' between last comma and last card in spoils_of_war
+      spoils_of_war = formatted_cards_at_stake.join(", ")
+      spoils_match = spoils_of_war.match(',[^,]+$')
+      spoils_of_war = "#{spoils_match.pre_match}, and #{formatted_cards_at_stake[-1]}"
+    end
+    return("#{winning_player.name} wins #{spoils_of_war} with "+
+    "#{winner_active_card.description}.")
+  end
+
   def self.compare_cards(card_1, card_2)
     values =
     {
@@ -46,11 +60,9 @@ class WarGame
     while p1_active_card.rank == p2_active_card.rank
       if(player1.card_count > 0)
         p1_active_card = self.player1.draw_card
-        round_winner = player1.name
       end
       if(player2.card_count > 0)
         p2_active_card = self.player2.draw_card
-        round_winner = player2.name
       end
       cards_at_stake.append(p1_active_card, p2_active_card)
       # Randomizes order of cards_at_stake to avoid infinite loops... somehow
@@ -58,12 +70,12 @@ class WarGame
 
       if WarGame.compare_cards(p1_active_card, p2_active_card) > 0
         cards_at_stake.map {|card| self.player1.take_card(card)}
+        round_winner = player1
         round_winner_card = p1_active_card
-        #puts("#{player1.name} wins #{cards_at_stake.map(&:description)} with #{p1_active_card.description}")
       elsif WarGame.compare_cards(p1_active_card, p2_active_card) < 0
         cards_at_stake.map {|card| self.player2.take_card(card)}
+        round_winner = player2
         round_winner_card = p2_active_card
-        #puts("#{player2.name} wins #{cards_at_stake.map(&:description)} with #{p2_active_card.description}")
       else
         # Adds cards from a war to cards_at_stake
         drawn_cards = []
@@ -81,17 +93,7 @@ class WarGame
       end
     end
     # Prints which player won what cards this round
-    spoils_of_war = cards_at_stake.map(&:description)
-    if cards_at_stake.length == 2
-      spoils_of_war = ("#{cards_at_stake[0].description} and " +
-      "#{cards_at_stake[1].description}")
-    else
-      spoils_of_war = spoils_of_war.join(", ")
-      spoils_match = spoils_of_war.match(',[^,]+$')
-      spoils_of_war = "#{spoils_match.pre_match}, and #{cards_at_stake[-1].description}"
-    end
-
-    puts("#{round_winner} wins #{spoils_of_war} with #{round_winner_card.description}")
+    puts(WarGame.get_round_results(round_winner, round_winner_card, cards_at_stake))
 
   end
 
