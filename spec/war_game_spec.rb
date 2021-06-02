@@ -10,22 +10,22 @@ describe 'WarGame' do
     expect(player1.card_count).to eq(player2.card_count)
   end
 
-  describe('#compare_cards') do
+  describe('#subtract_card_values') do
     before(:all) do
       @card_a = PlayingCard.new("2", "C")
       @card_b = PlayingCard.new("10", "H")
     end
     it('returns a positive number if card_1 has a greater value than card_2') do
-      expect(WarGame.compare_cards(@card_b, @card_a) > 0).to eq(true)
+      expect(WarGame.subtract_card_values(@card_b, @card_a) > 0).to eq(true)
     end
     it('returns a negative number if card_2 has a greater value than card_1') do
-      expect(WarGame.compare_cards(@card_a, @card_b) < 0).to eq(true)
+      expect(WarGame.subtract_card_values(@card_a, @card_b) < 0).to eq(true)
     end
     it('returns 0 if both cards have the same value') do
-      expect(WarGame.compare_cards(@card_a, PlayingCard.new("2", "D"))).to eq(0)
+      expect(WarGame.subtract_card_values(@card_a, PlayingCard.new("2", "D"))).to eq(0)
     end
     it('treats aces as the lowest value card') do
-      expect(WarGame.compare_cards(PlayingCard.new("A", "S"), @card_a) < 0).to eq(true)
+      expect(WarGame.subtract_card_values(PlayingCard.new("A", "S"), @card_a) < 0).to eq(true)
     end
   end
 
@@ -59,8 +59,6 @@ describe 'WarGame' do
         winner_active_card, cards_at_stake)
       expect(round_message).to(eq("Jane Doe wins 1 of Hearts, 2 of Hearts, 3 of"+
           " Hearts, and King of Hearts with King of Hearts."))
-        
-
     end
   end
 
