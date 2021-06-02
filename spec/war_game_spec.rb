@@ -58,7 +58,9 @@ describe 'WarGame' do
       @test_game.play_round
       expect(@test_game.player1.card_count).to(eq(2))
       expect(@test_game.player2.card_count).to(eq(0))
-      expect(@test_game.player1.draw_card(2)).to eq([king_card, two_card])
+      test_results = @test_game.player1.draw_card(2)
+      expect(test_results.include?(king_card)).to(eq(true))
+      expect(test_results.include?(two_card)).to(eq(true))
     end
 
     it('gives the player that wins a war all of the cards being played') do

@@ -49,12 +49,18 @@ class WarGame
         p2_active_card = self.player2.draw_card
       end
       cards_at_stake.append(p1_active_card, p2_active_card)
+      # Randomizes order of cards_at_stake to avoid infinite loops... somehow
+      cards_at_stake.shuffle!
+
+
       if WarGame.compare_cards(p1_active_card, p2_active_card) > 0
         cards_at_stake.map {|card| self.player1.take_card(card)}
         puts("#{player1.name} wins #{cards_at_stake.map(&:description)} with #{p1_active_card.description}")
+        #puts("#{player1.name} has #{player1.card_count} cards and #{player2.name} has #{player2.card_count}")
       elsif WarGame.compare_cards(p1_active_card, p2_active_card) < 0
         cards_at_stake.map {|card| self.player2.take_card(card)}
         puts("#{player2.name} wins #{cards_at_stake.map(&:description)} with #{p2_active_card.description}")
+        #puts("#{player1.name} has #{player1.card_count} cards and #{player2.name} has #{player2.card_count}")
       else
         # Adds cards from a war to cards_at_stake
         drawn_cards = []
