@@ -1,20 +1,24 @@
 require 'socket'
 require_relative '../lib/war_socket_server'
 
+# Remember, this is just for testing.
 class MockWarSocketClient
   attr_reader :socket
   attr_reader :output
 
   def initialize(port)
+    # Creates new TCPSocket Object
     @socket = TCPSocket.new('localhost', port)
   end
 
   def provide_input(text)
+    # Calls TCPSocket (the @socket) .puts
     @socket.puts(text)
   end
 
   def capture_output(delay=0.1)
     sleep(delay)
+    # From IO
     @output = @socket.read_nonblock(1000) # not gets which blocks
   rescue IO::WaitReadable
     @output = ""
@@ -48,12 +52,12 @@ describe WarSocketServer do
     @clients.push(client1)
     @server.accept_new_client("Player 1")
     @server.create_game_if_possible
-    expect(@server.games.count).to be 0
+    expect(@server.games.count).to(eq(0))
     client2 = MockWarSocketClient.new(@server.port_number)
     @clients.push(client2)
     @server.accept_new_client("Player 2")
     @server.create_game_if_possible
-    expect(@server.games.count).to be 1
+    expect(@server.games.count).to(eq(1))
   end
 
   # Add more tests to make sure the game is being played
