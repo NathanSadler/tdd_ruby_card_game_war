@@ -60,6 +60,22 @@ describe 'WarGame' do
       expect(@test_game.player2.card_count).to(eq(0))
       expect(@test_game.player1.draw_card(2)).to eq([king_card, two_card])
     end
+
+    it('gives the player that wins a war all of the cards being played') do
+      ["2", "3", "4", "5", "6"].map {|rank| @test_game.player1.take_card(PlayingCard.new(rank, "S"))}
+      ["2", "3", "4", "5", "K"].map {|rank| @test_game.player2.take_card(PlayingCard.new(rank, "H"))}
+      @test_game.play_round
+      expect(@test_game.player1.card_count).to(eq(0))
+      expect(@test_game.player2.card_count).to(eq(10))
+    end
+
+    it('declares war even if one of the players has less than 4 cards') do
+      ["2", "3", "4", "5", "6"].map {|rank| @test_game.player1.take_card(PlayingCard.new(rank, "S"))}
+      ["2", "3", "4", "5"].map {|rank| @test_game.player2.take_card(PlayingCard.new(rank, "H"))}
+      @test_game.play_round
+      expect(@test_game.player1.card_count).to(eq(9))
+      expect(@test_game.player2.card_count).to(eq(0))
+    end
   end
 
 
