@@ -59,8 +59,6 @@ describe 'WarGame' do
         winner_active_card, cards_at_stake)
       expect(round_message).to(eq("Jane Doe wins 1 of Hearts, 2 of Hearts, 3 of"+
           " Hearts, and King of Hearts with King of Hearts."))
-
-
     end
   end
 
