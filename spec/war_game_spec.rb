@@ -76,7 +76,14 @@ describe 'WarGame' do
       expect(@test_game.player1.card_count).to(eq(9))
       expect(@test_game.player2.card_count).to(eq(0))
     end
-  end
 
+    it('can declare war multiple times in a row') do
+      ["2", "3", "4", "5", "6", "7", "8", "9", "10"].map {|rank| @test_game.player1.take_card(PlayingCard.new(rank, "S"))}
+      ["2", "3", "4", "5", "6", "7", "8", "9", "K"].map {|rank| @test_game.player2.take_card(PlayingCard.new(rank, "H"))}
+      @test_game.play_round
+      expect(@test_game.player1.card_count).to(eq(0))
+      expect(@test_game.player2.card_count).to(eq(18))
+    end
+  end
 
 end
