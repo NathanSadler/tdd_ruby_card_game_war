@@ -3,6 +3,8 @@ require 'socket'
 
 class WarSocketServer
 
+  attr_reader :players
+
   def initialize
     @players = []
   end
