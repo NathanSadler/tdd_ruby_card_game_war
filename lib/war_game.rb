@@ -42,8 +42,12 @@ class WarGame
     p2_active_card = PlayingCard.new("2", "S")
     cards_at_stake = []
     while p1_active_card.rank == p2_active_card.rank
-      p1_active_card = self.player1.draw_card
-      p2_active_card = self.player2.draw_card
+      if(player1.card_count > 0)
+        p1_active_card = self.player1.draw_card
+      end
+      if(player2.card_count > 0)
+        p2_active_card = self.player2.draw_card
+      end
       cards_at_stake.append(p1_active_card, p2_active_card)
       if WarGame.compare_cards(p1_active_card, p2_active_card) > 0
         cards_at_stake.map {|card| self.player1.take_card(card)}
