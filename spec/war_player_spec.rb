@@ -49,6 +49,14 @@ describe 'WarPlayer' do
       end
     end
 
+    describe('.clear_deck') do
+      it("removes all cards from the player's deck") do
+        player.take_card(PlayingCard.new("4", "S"))
+        player.clear_deck
+        expect(player.card_count).to(eq(0))
+      end
+    end
+
     it("changes the player's card to the last card drawn if multiple cards are" +
     " drawn") do
       new_cards = [PlayingCard.new("4", "H"), PlayingCard.new("5", "H"),

@@ -4,11 +4,7 @@ class CardDeck
   def initialize(custom_cards=nil)
     @card_list = []
     if custom_cards.nil?
-      PlayingCard::SUITS.each do |suit|
-        PlayingCard::RANKS.each do |rank|
-          @card_list.push(PlayingCard.new(rank, suit))
-        end
-      end
+      @card_list = CardDeck.generate_array_with_all_cards
     else
       custom_cards.each do |i|
         @card_list.push(i)

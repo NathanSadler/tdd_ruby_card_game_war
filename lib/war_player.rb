@@ -25,6 +25,10 @@
      end
    end
 
+   def clear_deck
+     @player_deck.clear
+   end
+
    def draw_card(card_count=1)
      drawn = @player_deck.draw(card_count)
      set_active_card(drawn)
