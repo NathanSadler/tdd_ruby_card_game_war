@@ -1,5 +1,7 @@
 require 'socket'
 require_relative '../lib/war_socket_server'
+require_relative '../lib/war_socket_client'
+require_relative '../lib/playing_card'
 
 # Remember, this is just for testing.
 class MockWarSocketClient
@@ -27,6 +29,21 @@ class MockWarSocketClient
   def close
     @socket.close if @socket
   end
+end
+
+describe WarSocketClient do
+  before(:each) do
+    @server = WarSocketServer.new
+    @clients = []
+  end
+
+  after(:each) do
+    @server.stop
+    @clients.each do |client|
+    end
+  end
+
+
 end
 
 describe WarSocketServer do
@@ -60,6 +77,21 @@ describe WarSocketServer do
     expect(@server.games.count).to(eq(1))
   end
 
+  describe('.draw_card_from_player') do
+    it('draws a card from the deck of a warplayer') do
+      @server.start
+      client1 = WarSocketClient.new(@server.port_number)
+      @clients.push(client1)
+      @server.accept_new_client("Player 1")
+      client2 = WarSocketClient.new(@server.port_number)
+      @clients.push(client2)
+      @server.accept_new_client("Player 2")
+      @server.create_game_if_possible
+      drawn_card = @server.draw_card_from_player(0)
+      expect(drawn_card.is_a?(PlayingCard)).to(eq(true))
+    end
+  end
+
   describe('.get_text_from_user') do
     it('gets text input from a specified client') do
       @server.start
@@ -73,6 +105,19 @@ describe WarSocketServer do
       @clients[0].provide_input("Hello World")
       text_from_client = @server.get_text_from_user(@server.players[0][:client])
       expect(text_from_client.include?("Hello World")).to(eq(true))
+    end
+
+    describe('.wait_for_specific_message') do
+      it('Waits until it gets a specific message from a user') do
+        @server.start
+        client1 = WarSocketClient.new(@server.port_number)
+        @clients.push(client1)
+        @server.accept_new_client("Player 1")
+        client1.provide_input("Hello to you to")
+        text_from_client = @server.wait_for_specific_message("Hello to you to",
+        @server.players[0][:client])
+        expect(text_from_client.include?("Hello to you to")).to(eq(true))
+      end
     end
   end
 

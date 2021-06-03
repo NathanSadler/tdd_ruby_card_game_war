@@ -3,11 +3,12 @@ require 'socket'
 require_relative 'war_player'
 
 class WarSocketServer
-
+  @@player_counter
   attr_accessor :players
 
   def initialize
     @players = []
+    @@player_counter = 0
   end
 
   def port_number
@@ -18,13 +19,18 @@ class WarSocketServer
     @games ||= []
   end
 
+  def get_game(index)
+    return @games[index]
+  end
+
   def start
     @server = TCPServer.new(port_number)
   end
 
   def accept_new_client(player_name = "Random Player")
     client = @server.accept_nonblock
-    @players.push({:client => client})
+    @players.push({:client => client, :id => @@player_counter})
+    @@player_counter += 1
     # associate player and client
   rescue IO::WaitReadable, Errno::EINTR
     puts "No client to accept"
@@ -44,6 +50,15 @@ class WarSocketServer
   rescue IO::WaitReadable
   end
 
+  def wait_for_specific_message(message, client)
+    while true
+      text_from_user = get_text_from_user(client).chomp
+      if(text_from_user == message)
+        return text_from_user
+      end
+    end
+  end
+
   def create_game_if_possible
     # Check how many clients there are (there need to be 2)
     if @players.length == 2
@@ -55,7 +70,8 @@ class WarSocketServer
   end
 
   def play_round
-    # Waits for each player to give any text input. Any text will do
+    # Waits for each player to say 'ready'
+    send_message_to_all_clients("enter 'ready' to play the next round")
     @players.map {|player| get_text_from_user(player[:client])}
 
     # Plays the round
@@ -63,6 +79,16 @@ class WarSocketServer
 
     # Delivers end-of-round message to both players
     send_message_to_all_clients(end_of_round_message)
+  end
+
+  def draw_card_from_player(id)
+    drawn_card = ""
+    @players.each do |player|
+      if player[:id] == id
+        print("this part got executed")
+        drawn_card = player[:war_player].draw_card
+      end
+    end
   end
 
   def stop

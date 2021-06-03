@@ -10,6 +10,11 @@ class WarSocketClient
     @socket.puts(text)
   end
 
+  def get_socket
+    return @socket
+  end
+
+
   def capture_output(delay=0.1)
     sleep(delay)
     @output = @socket.read_nonblock(1000) # not gets which blocks
