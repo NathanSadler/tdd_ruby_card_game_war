@@ -23,10 +23,12 @@ describe 'WarGame' do
 
   describe('.deal_cards') do
     it("equally deals cards between the two players") do
-      starting_deck = [2, 3, 4, 5, 6, 7].map {|rank| PlayingCard.new(rank, "H")}
-      game.deal_cards
+      starting_cards = [2, 3, 4, 5, 6, 7].map {|rank| PlayingCard.new(rank, "H")}
+      game.deal_cards(CardDeck.new(starting_cards))
       [game.player1, game.player2].each {|player| expect(player.card_count).to(eq(3))}
-
+      # Makes sure player 1 has the 2, 4, and 6 of hearts
+      ([2, 4, 6].map {|rank| PlayingCard.new(rank, "H")}).each {|card| expect(
+        game.player1.has_card?(card)).to(eq(true))}
     end
   end
 

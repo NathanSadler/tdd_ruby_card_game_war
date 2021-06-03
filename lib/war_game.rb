@@ -14,6 +14,13 @@ class WarGame
     end
   end
 
+  def deal_cards(deck)
+    (deck.cards_left / 2).times do
+      player1.take_card(deck.draw)
+      player2.take_card(deck.draw)
+    end
+  end
+
   def winner
     if (@player1.card_count > 0) && (@player2.card_count > 0)
       return nil

@@ -3,7 +3,7 @@ require_relative('playing_card')
 class CardDeck
   def initialize(custom_cards=nil)
     @card_list = []
-    if !custom_cards
+    if custom_cards.nil?
       PlayingCard::SUITS.each do |suit|
         PlayingCard::RANKS.each do |rank|
           @card_list.push(PlayingCard.new(rank, suit))
@@ -14,6 +14,16 @@ class CardDeck
         @card_list.push(i)
       end
     end
+  end
+
+  def self.generate_array_with_all_cards
+    card_list = []
+    PlayingCard::SUITS.each do |suit|
+      PlayingCard::RANKS.each do |rank|
+        card_list.push(PlayingCard.new(rank, suit))
+      end
+    end
+    card_list
   end
 
   def has_card?(card_to_find)

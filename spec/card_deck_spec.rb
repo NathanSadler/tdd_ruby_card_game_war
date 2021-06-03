@@ -9,6 +9,16 @@ describe 'CardDeck' do
     expect(deck.cards_left).to eq 52
   end
 
+  describe('#generate_array_with_all_cards') do
+    it('generates an array that contains each card') do
+      cards_to_test = [PlayingCard.new("2", "D"), PlayingCard.new("7", "H"),
+      PlayingCard.new("Q", "S"), PlayingCard.new("A", "C")]
+      all_cards = CardDeck.generate_array_with_all_cards
+      expect(all_cards.length).to(eq(52))
+      cards_to_test.each {|card| expect(all_cards.include?(card)).to(eq(true))}
+    end
+  end
+
   it 'should draw the top card' do
     card = deck.draw
     expect(card).to eq(PlayingCard.new("A", "C"))
