@@ -17,11 +17,18 @@
    end
 
    def set_active_card(new_card)
-     @active_card = new_card
+     if !new_card.nil?
+       if !new_card.is_a?(Array)
+         new_card = [new_card]
+       end
+       @active_card = new_card[-1]
+     end
    end
 
    def draw_card(card_count=1)
-     @player_deck.draw(card_count)
+     drawn = @player_deck.draw(card_count)
+     set_active_card(drawn)
+     drawn
    end
 
    def name
