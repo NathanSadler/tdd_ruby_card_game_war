@@ -52,7 +52,8 @@ class WarSocketServer
 
   def wait_for_specific_message(message, client)
     while true
-      text_from_user = get_text_from_user(client).chomp
+      text_from_user = get_text_from_user(client)
+      if !text_from_user.nil? then text_from_user.chomp! end
       if(text_from_user == message)
         return text_from_user
       end
@@ -72,7 +73,7 @@ class WarSocketServer
   def play_round
     # Waits for each player to say 'ready'
     send_message_to_all_clients("enter 'ready' to play the next round")
-    @players.map {|player| get_text_from_user(player[:client])}
+    @players.map {|player| wait_for_specific_message('ready', player[:client])}
 
     # Plays the round
     end_of_round_message = games[0].play_round

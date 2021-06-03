@@ -149,8 +149,8 @@ describe WarSocketServer do
       @clients.push(client2)
       @server.accept_new_client("Player 2")
       @server.create_game_if_possible
-      @clients[0].provide_input("Ready")
-      @clients[1].provide_input("Ready")
+      @clients[0].provide_input("ready")
+      @clients[1].provide_input("ready")
       @server.play_round
       expect(@clients[0].capture_output.include?(" wins ")).to(eq(true))
     end
