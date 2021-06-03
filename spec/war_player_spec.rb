@@ -38,6 +38,27 @@ describe 'WarPlayer' do
       expect(player.active_card).to(eq(new_card))
     end
 
+    describe('.take_multiple_cards') do
+      it("adds cards in an array to the player's deck") do
+        player.take_multiple_cards([PlayingCard.new("4", "H"),
+        PlayingCard.new("5", "H")])
+        expect(player.card_count).to(eq(2))
+        expect(player.has_card?(PlayingCard.new("4", "H"))).to(eq(true))
+        expect(player.has_card?(PlayingCard.new("5", "H"))).to(eq(true))
+      end
+    end
+
+    describe('.draw_multiple_cards') do
+      before(:each) do
+        # Start with multiple cards in the deck
+
+      end
+      it("draws multiple cards from a player's deck and returns them in an"+
+      " array") do
+
+      end
+    end
+
     describe('.has_card?') do
       let(:test_card) {PlayingCard.new("3", "D")}
       it('is true if the player has the specified card') do

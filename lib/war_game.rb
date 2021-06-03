@@ -38,9 +38,15 @@ class WarGame
     end
   end
 
-  def award_cards(cards_to_award, winning_player)
+  # Gives the cards in cards_at_stake to the player that has the higher-rank
+  # active card
+  def award_cards(cards_to_award)
     cards_to_award.shuffle!
-    cards_to_award.each {|card| winning_player.take_card(card)}
+    if(WarGame.subtract_card_values(@player1.active_card, @player2.active_card)>0)
+      cards_to_award.each {|card| @player1.take_card(card)}
+    else
+      cards_to_award.each {|card| @player2.take_card(card)}
+    end
   end
 
 # Assigns a numeric value to each card rank and returns the result of subtracting
@@ -60,9 +66,11 @@ class WarGame
   end
 
   def declare_war
+    @cards_at_stake = []
     while player1.active_card.rank == player2.active_card.rank
-      [player1, player2].each {|player| player.draw_card(4)}
+      [player1, player2].each {|player| add_to_stakes(player.draw_card(4))}
     end
+    award_cards(@cards_at_stake)
   end
 
   def play_round

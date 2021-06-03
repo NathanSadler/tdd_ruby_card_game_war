@@ -25,12 +25,14 @@ describe 'WarGame' do
   end
 
   describe('.award_cards') do
-    it('gives cards to the winner of a round') do
-      cards_at_stake = [PlayingCard.new("2", "H"), PlayingCard.new("3", "H")]
-      game.player1.card_count.times {game.player1.draw_card}
-      game.award_cards(cards_at_stake, game.player1)
+    it('gives cards to the player with a higher-rank active card') do
+      game.player1.clear_deck
+      cards_at_stake = [PlayingCard.new("2", "D"), PlayingCard.new("3", "D")]
+      game.player1.set_active_card(PlayingCard.new("K", "D"))
+      game.player2.set_active_card(PlayingCard.new("2", "D"))
+      game.award_cards(cards_at_stake)
       player_1_cards = game.player1.draw_card(2)
-      cards_at_stake.each {|card| expect(player_1_cards.include?(card)).to(eq(true))}
+      (["2", "3"].map {|rank| PlayingCard.new(rank, "D")}).each {|card| expect(player_1_cards.include?(card)).to(eq(true))}
     end
   end
 

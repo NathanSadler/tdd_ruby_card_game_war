@@ -29,6 +29,12 @@
      @player_deck.clear
    end
 
+   def take_multiple_cards(cards)
+     cards.each do |card|
+       take_card(card)
+     end
+   end
+
    def draw_card(card_count=1)
      drawn = @player_deck.draw(card_count)
      set_active_card(drawn)
