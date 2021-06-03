@@ -2,7 +2,7 @@ require_relative('card_deck')
 require_relative('war_player')
 class WarGame
   attr_accessor :player1, :player2
-  
+
   def initialize(player_1_name=nil, player_2_name=nil, custom_deck=nil)
     starting_deck = CardDeck.new(custom_deck)
     starting_deck.shuffle
@@ -24,6 +24,11 @@ class WarGame
     end
   end
 
+  def award_cards(cards_to_award, winning_player)
+    cards_to_award.shuffle!
+    cards_to_award.each {|card| winning_player.take_card(card)}
+  end
+
 # Assigns a numeric value to each card rank and returns the result of subtracting
 # the first card's value from the second card's value
   def self.get_round_results(winning_player, winner_active_card, cards_at_stake)
@@ -41,13 +46,7 @@ class WarGame
   end
 
   def self.subtract_card_values(card_1, card_2)
-    values =
-    {
-      "A" => 1,
-      "J" => 11,
-      "Q" => 12,
-      "K" => 13
-    }
+    values = {"A" => 1, "J" => 11, "Q" => 12, "K" => 13}
     (2..10).each do |number|
       values.store(number.to_s, number)
     end
@@ -68,6 +67,7 @@ class WarGame
         p2_active_card = self.player2.draw_card
       end
       cards_at_stake.append(p1_active_card, p2_active_card)
+
       # Randomizes order of cards_at_stake to avoid infinite loops... somehow
       cards_at_stake.shuffle!
 
@@ -80,6 +80,7 @@ class WarGame
         round_winner = player2
         round_winner_card = p2_active_card
       else
+
         # Adds cards from a war to cards_at_stake. If a player only has one card,
         # it doesn't draw one from them because that card will be their next
         # active card

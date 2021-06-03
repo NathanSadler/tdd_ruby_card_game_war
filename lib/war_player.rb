@@ -5,7 +5,7 @@
      @player_deck = CardDeck.new
      @player_deck.clear
      @name = name
-     @active_card = nil
+     @active_card = PlayingCard.new("0", "D")
    end
 
    def card_count

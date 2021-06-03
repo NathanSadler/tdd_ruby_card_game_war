@@ -3,11 +3,22 @@ require_relative '../lib/playing_card'
 
 describe 'WarGame' do
   let(:game) {WarGame.new("John Doe", "Jane Doh")}
+
   it('creates two players with different 26-card decks') do
     player1 = game.player1
     player2 = game.player2
     expect(player1.draw_card != player2.draw_card).to eq(true)
     expect(player1.card_count).to eq(player2.card_count)
+  end
+
+  describe('.award_cards') do
+    it('gives cards to the winner of a round') do
+      cards_at_stake = [PlayingCard.new("2", "H"), PlayingCard.new("3", "H")]
+      game.player1.card_count.times {game.player1.draw_card}
+      game.award_cards(cards_at_stake, game.player1)
+      player_1_cards = game.player1.draw_card(2)
+      cards_at_stake.each {|card| expect(player_1_cards.include?(card)).to(eq(true))}
+    end
   end
 
   describe('#subtract_card_values') do
