@@ -34,7 +34,7 @@ class WarGame
 
   def update_previous_round_report(winning_player, cards_won, won_with)
     @previous_round[:winning_player] = winning_player
-    @previous_round[:cards_won] = cards_won
+    @previous_round[:cards_won] = cards_won.map(&:description)
     @previous_round[:won_with] = won_with
   end
 
@@ -67,8 +67,7 @@ class WarGame
   end
 
 
-  def last_round_report(winning_player, winner_active_card, cards_at_stake)
-
+  def get_previous_round_report_message
   end
 
   # Assigns a numeric value to each card rank and returns the result of subtracting

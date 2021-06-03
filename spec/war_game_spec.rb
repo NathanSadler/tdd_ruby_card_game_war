@@ -108,30 +108,26 @@ describe 'WarGame' do
       game.update_previous_round_report(game.player1, cards_won,
         PlayingCard.new("7", "H"))
       expect(game.previous_round[:winning_player]).to(eq(game.player1))
-      expect(game.previous_round[:cards_won]).to(eq(cards_won))
+      expect(game.previous_round[:cards_won]).to(eq(cards_won.map(&:description)))
       expect(game.previous_round[:won_with]).to(eq(PlayingCard.new("7", "H")))
     end
   end
 
-  describe('.previous_round_report') do
-    before(:each) do
-      @test_game = WarGame.new("John Doe", "Jane Doe")
-      # Clears all cards from both players
-      player1_card_count = @test_game.player1.card_count
-      player2_card_count = @test_game.player2.card_count
-      player1_card_count.times {@test_game.player1.draw_card}
-      player2_card_count.times {@test_game.player2.draw_card}
-    end
-
-    it('returns a message in the format <winner name> wins <card1>, <card2>, '+
+  describe('.get_previous_round_report_message') do
+    it('returns a message in the format <winner name> won <card1>, <card2>, '+
     "..., and <cardn> with <winner_active_card>") do
-      cards_at_stake = []
-      ["1", "2", "3", "K"].map { |rank| cards_at_stake.push(PlayingCard.new(rank, "H"))}
-      winner_active_card = PlayingCard.new("K", "H")
-      round_message = WarGame.get_round_results(@test_game.player2,
-        winner_active_card, cards_at_stake)
-      expect(round_message).to(eq("Jane Doe wins 1 of Hearts, 2 of Hearts, 3 of"+
-          " Hearts, and King of Hearts with King of Hearts."))
+      cards_won = [PlayingCard.new("3", "S"), PlayingCard.new("7", "H"), PlayingCard.new("4", "H")]
+      game.update_previous_round_report(game.player1, cards_won,
+        PlayingCard.new("7", "H"))
+      expected_string = ("John Doe won 3 of Spades, 7 of Hearts, and 4 of Hearts with 7 of Hearts")
+      expect(game.get_previous_round_report_message).to(eq(expected_string))
+    end
+    it("should not have commas between won cards if there were only two of them") do
+      cards_won = [PlayingCard.new("3", "S"), PlayingCard.new("7", "H")]
+      game.update_previous_round_report(game.player1, cards_won,
+        PlayingCard.new("7", "H"))
+      expected_string = ("John Doe won 3 of Spades and 7 of Hearts with 7 of Hearts")
+      expect(game.get_previous_round_report_message).to(eq(expected_string))
     end
   end
 
