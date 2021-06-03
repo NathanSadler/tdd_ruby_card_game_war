@@ -86,8 +86,8 @@ class WarSocketServer
     drawn_card = ""
     @players.each do |player|
       if player[:id] == id
-        print("this part got executed")
         drawn_card = player[:war_player].draw_card
+        return drawn_card
       end
     end
   end

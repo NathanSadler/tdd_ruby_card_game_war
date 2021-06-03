@@ -2,6 +2,7 @@ require_relative('card_deck')
 require_relative('war_player')
 class WarGame
   attr_accessor :player1, :player2
+  
   def initialize(player_1_name=nil, player_2_name=nil, custom_deck=nil)
     starting_deck = CardDeck.new(custom_deck)
     starting_deck.shuffle
