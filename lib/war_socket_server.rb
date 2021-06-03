@@ -30,6 +30,12 @@ class WarSocketServer
     puts "No client to accept"
   end
 
+  def send_message_to_all_clients(message)
+    players.each do |player|
+      player[:client].puts(message)
+    end
+  end
+
   # Pauses until it gets any text input from a specified client
   def get_text_from_user(client, prompt="")
     sleep(0.1)

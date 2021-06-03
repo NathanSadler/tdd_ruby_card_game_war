@@ -7,5 +7,5 @@ while server.games.count != 1
   server.create_game_if_possible
 end
 puts "game started"
-server.players[0][:client].puts "Testing"
+#server.players[0][:client].puts "Testing"
 print('ah')

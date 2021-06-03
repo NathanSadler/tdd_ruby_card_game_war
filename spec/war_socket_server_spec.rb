@@ -76,6 +76,19 @@ describe WarSocketServer do
     end
   end
 
+  it('sends messages to all clients') do
+    @server.start
+    client1 = MockWarSocketClient.new(@server.port_number)
+    @clients.push(client1)
+    @server.accept_new_client("Player 1")
+    client2 = MockWarSocketClient.new(@server.port_number)
+    @clients.push(client2)
+    @server.accept_new_client("Player 2")
+    @server.send_message_to_all_clients("Hello World")
+    expect(@clients[0].capture_output.include?("Hello World"))
+    expect(@clients[1].capture_output.include?("Hello World"))
+  end
+
   # Add more tests to make sure the game is being played
   # For example:
   #   make sure the mock client gets appropriate output
@@ -87,8 +100,6 @@ describe WarSocketServer do
       client1 = MockWarSocketClient.new(@server.port_number)
       @clients.push(client1)
       @server.accept_new_client("Player 1")
-      @server.create_game_if_possible
-      expect(@server.games.count).to(eq(0))
       client2 = MockWarSocketClient.new(@server.port_number)
       @clients.push(client2)
       @server.accept_new_client("Player 2")
