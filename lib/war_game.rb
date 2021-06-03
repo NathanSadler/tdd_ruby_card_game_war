@@ -68,6 +68,13 @@ class WarGame
 
 
   def get_previous_round_report_message
+    spoils_of_war = @previous_round[:cards_won].join(" and ")
+    if (@previous_round[:cards_won].length > 2)
+      spoils_match = @previous_round[:cards_won].join(", ").match(',[^,]+$')
+      spoils_of_war = "#{spoils_match.pre_match}, and #{@previous_round[:cards_won][-1]}"
+    end
+    return("#{@previous_round[:winning_player].name} won #{spoils_of_war} with "+
+    "#{@previous_round[:won_with].description}.")
   end
 
   # Assigns a numeric value to each card rank and returns the result of subtracting

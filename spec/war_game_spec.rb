@@ -119,14 +119,14 @@ describe 'WarGame' do
       cards_won = [PlayingCard.new("3", "S"), PlayingCard.new("7", "H"), PlayingCard.new("4", "H")]
       game.update_previous_round_report(game.player1, cards_won,
         PlayingCard.new("7", "H"))
-      expected_string = ("John Doe won 3 of Spades, 7 of Hearts, and 4 of Hearts with 7 of Hearts")
+      expected_string = ("John Doe won 3 of Spades, 7 of Hearts, and 4 of Hearts with 7 of Hearts.")
       expect(game.get_previous_round_report_message).to(eq(expected_string))
     end
     it("should not have commas between won cards if there were only two of them") do
       cards_won = [PlayingCard.new("3", "S"), PlayingCard.new("7", "H")]
       game.update_previous_round_report(game.player1, cards_won,
         PlayingCard.new("7", "H"))
-      expected_string = ("John Doe won 3 of Spades and 7 of Hearts with 7 of Hearts")
+      expected_string = ("John Doe won 3 of Spades and 7 of Hearts with 7 of Hearts.")
       expect(game.get_previous_round_report_message).to(eq(expected_string))
     end
   end
