@@ -32,7 +32,7 @@
    end
 
    def has_card?(card_to_find)
-     @player_deck.include?(card_to_find)
+     @player_deck.has_card?(card_to_find)
    end
 
    def name
