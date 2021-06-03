@@ -60,9 +60,34 @@ describe WarSocketServer do
     expect(@server.games.count).to(eq(1))
   end
 
+  describe('.get_text_from_user') do
+    it('gets text input from a specified client') do
+      @server.start
+      client1 = MockWarSocketClient.new(@server.port_number)
+      @clients.push(client1)
+      @server.accept_new_client("Player 1")
+      client2 = MockWarSocketClient.new(@server.port_number)
+      @clients.push(client2)
+      @server.accept_new_client("Player 2")
+
+
+      #@server.players[0][:client].puts("Hello World")
+      @clients[0].provide_input("Hello World")
+      foo = @server.get_text_from_user(@server.players[0][:client])
+      #thr = Thread.new {@server.players[0][:client].puts("Hello World")}
+      #thr.join
+      #print("ZZZZZ #{thr.value}")
+      #@server.players[0][:client].puts("Hello World")
+
+      expect(foo.include?("Hello World")).to(eq(true))
+    end
+  end
+
   # Add more tests to make sure the game is being played
   # For example:
   #   make sure the mock client gets appropriate output
   #   make sure the next round isn't played until both clients say they are ready to play
   #   ...
+
+
 end

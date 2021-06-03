@@ -29,10 +29,21 @@ class WarSocketServer
     puts "No client to accept"
   end
 
+  # Pauses until it gets any text input from a specified client
+  def get_text_from_user(client, prompt="")
+    #client.print(prompt)
+    sleep(0.1)
+    client_input = client.read_nonblock(1000)
+
+    return client_input
+  rescue IO::WaitReadable
+  end
+
   def create_game_if_possible
     # Check how many clients there are (there need to be 2)
     if @players.length == 2
       games.push(WarGame.new("Player 1", "Player 2"))
+      #get_text_from_user(self.players[0][:client])
     end
   end
 
