@@ -70,6 +70,19 @@ describe 'WarGame' do
     end
   end
 
+  describe('.get_player_with_higher_rank_active_card') do
+    it('returns the player with the higher ranking active card') do
+      game.player1.set_active_card(PlayingCard.new("K", "C"))
+      game.player2.set_active_card(PlayingCard.new("2", "H"))
+      expect(game.get_player_with_higher_rank_active_card).to(eq(game.player1))
+    end
+    it("returns nil if the rank of both players' cards are equal") do
+      game.player1.set_active_card(PlayingCard.new("K", "C"))
+      game.player2.set_active_card(PlayingCard.new("K", "H"))
+      expect(game.get_player_with_higher_rank_active_card).to(eq(nil))
+    end
+  end
+
   describe('#subtract_card_values') do
     before(:all) do
       @card_a = PlayingCard.new("2", "C")

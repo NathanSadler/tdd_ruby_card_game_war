@@ -21,6 +21,16 @@ class WarGame
     end
   end
 
+  def get_player_with_higher_rank_active_card
+    if(WarGame.subtract_card_values(@player1.active_card, @player2.active_card) > 0)
+      return @player1
+    elsif(WarGame.subtract_card_values(@player1.active_card, @player2.active_card) < 0)
+      return @player2
+    else
+      return nil
+    end
+  end
+
   def deal_cards(deck)
     (deck.cards_left / 2).times do
       player1.take_card(deck.draw)
