@@ -94,7 +94,7 @@ class WarGame
     end
     # Prints which player won what cards this round
     puts(WarGame.get_round_results(round_winner, round_winner_card, cards_at_stake))
-
+    WarGame.get_round_results(round_winner, round_winner_card, cards_at_stake)
   end
 
 end

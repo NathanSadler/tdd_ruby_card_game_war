@@ -70,8 +70,6 @@ describe WarSocketServer do
       @clients.push(client2)
       @server.accept_new_client("Player 2")
 
-
-      #@server.players[0][:client].puts("Hello World")
       @clients[0].provide_input("Hello World")
       text_from_client = @server.get_text_from_user(@server.players[0][:client])
       expect(text_from_client.include?("Hello World")).to(eq(true))
@@ -83,6 +81,22 @@ describe WarSocketServer do
   #   make sure the mock client gets appropriate output
   #   make sure the next round isn't played until both clients say they are ready to play
   #   ...
-
-
+  describe('.play_round') do
+    it('plays a round when both players are ready') do
+      @server.start
+      client1 = MockWarSocketClient.new(@server.port_number)
+      @clients.push(client1)
+      @server.accept_new_client("Player 1")
+      @server.create_game_if_possible
+      expect(@server.games.count).to(eq(0))
+      client2 = MockWarSocketClient.new(@server.port_number)
+      @clients.push(client2)
+      @server.accept_new_client("Player 2")
+      @server.create_game_if_possible
+      @clients[0].provide_input("Ready")
+      @clients[1].provide_input("Ready")
+      @server.play_round
+      expect(@clients[0].capture_output.include?(" wins ")).to(eq(true))
+    end
+  end
 end

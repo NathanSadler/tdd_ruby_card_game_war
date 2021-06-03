@@ -8,3 +8,4 @@ while server.games.count != 1
 end
 puts "game started"
 server.players[0][:client].puts "Testing"
+print('ah')
