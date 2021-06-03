@@ -52,10 +52,7 @@ describe 'WarGame' do
     before(:each) do
       @test_game = WarGame.new("John Doe", "Jane Doe")
       # Clears all cards from both players
-      player1_card_count = @test_game.player1.card_count
-      player2_card_count = @test_game.player2.card_count
-      player1_card_count.times {@test_game.player1.draw_card}
-      player2_card_count.times {@test_game.player2.draw_card}
+      [@test_game.player1, @test_game.player2].each {|player| player.clear_deck}
     end
     it('gives the player that wins a war all of the cards being played') do
       ["2", "3", "4", "5", "6"].map {|rank| @test_game.player1.take_card(PlayingCard.new(rank, "S"))}

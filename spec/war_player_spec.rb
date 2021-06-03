@@ -48,17 +48,6 @@ describe 'WarPlayer' do
       end
     end
 
-    describe('.draw_multiple_cards') do
-      before(:each) do
-        # Start with multiple cards in the deck
-
-      end
-      it("draws multiple cards from a player's deck and returns them in an"+
-      " array") do
-
-      end
-    end
-
     describe('.has_card?') do
       let(:test_card) {PlayingCard.new("3", "D")}
       it('is true if the player has the specified card') do
