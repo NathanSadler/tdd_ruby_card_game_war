@@ -13,8 +13,15 @@ describe 'WarPlayer' do
     expect(player.draw_card).to eq(PlayingCard.new("2", "H"))
   end
 
+  describe('set_active_card') do
+    it("changes the player's active card") do
+      new_card = PlayingCard.new("4", "H")
+      player.set_active_card(new_card)
+      expect(player.active_card).to(eq(new_card))
+    end
+  end
+
   it('removes the card at the top of the deck and returns it') do
-    drawn_card = player.draw_card
     player.take_card(PlayingCard.new("4", "H"))
     expect(player.draw_card).to eq(PlayingCard.new("4", "H"))
   end
