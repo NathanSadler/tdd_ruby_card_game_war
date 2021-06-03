@@ -6,9 +6,7 @@ class CardDeck
     if custom_cards.nil?
       @card_list = CardDeck.generate_array_with_all_cards
     else
-      custom_cards.each do |i|
-        @card_list.push(i)
-      end
+      custom_cards.each {|card| @card_list.push(card)}
     end
   end
 

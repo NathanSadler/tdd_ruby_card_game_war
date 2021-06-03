@@ -11,6 +11,19 @@ describe 'WarGame' do
     expect(player1.card_count).to eq(player2.card_count)
   end
 
+  describe('.add_to_stakes') do
+    it('adds a single card to the stakes') do
+      card = PlayingCard.new("9", "C")
+      game.add_to_stakes(card)
+      expect(game.cards_at_stake).to(eq([card]))
+    end
+    it('adds several cards to the stakes') do
+      cards = [PlayingCard.new("9", "C"), PlayingCard.new("10", "C")]
+      game.add_to_stakes(cards)
+      expect(game.cards_at_stake).to(eq(cards))
+    end
+  end
+
   describe('.award_cards') do
     it('gives cards to the winner of a round') do
       cards_at_stake = [PlayingCard.new("2", "H"), PlayingCard.new("3", "H")]
@@ -132,16 +145,13 @@ describe 'WarGame' do
     end
 
     it('gives the player with a higher rank card the cards at play') do
-      king_card = PlayingCard.new("K", "S")
-      @test_game.player1.take_card(king_card)
-      two_card = PlayingCard.new("2", "S")
-      @test_game.player2.take_card(two_card)
+      @test_game.player1.take_card(PlayingCard.new("K", "S"))
+      @test_game.player2.take_card(PlayingCard.new("2", "S"))
       @test_game.play_round
       expect(@test_game.player1.card_count).to(eq(2))
       expect(@test_game.player2.card_count).to(eq(0))
-      test_results = @test_game.player1.draw_card(2)
-      expect(test_results.include?(king_card)).to(eq(true))
-      expect(test_results.include?(two_card)).to(eq(true))
+      expect(test_results.include?(PlayingCard.new("K", "S"))).to(eq(true))
+      expect(test_results.include?(PlayingCard.new("2", "S"))).to(eq(true))
     end
 
     it('declares war even if one of the players has less than 4 cards') do

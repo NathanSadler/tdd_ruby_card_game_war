@@ -2,6 +2,7 @@ require_relative('card_deck')
 require_relative('war_player')
 class WarGame
   attr_accessor :player1, :player2
+  attr_reader :cards_at_stake
 
   def initialize(player_1_name=nil, player_2_name=nil, custom_deck=nil)
     starting_deck = CardDeck.new(custom_deck)
@@ -9,6 +10,15 @@ class WarGame
     @player1 = WarPlayer.new(player_1_name)
     @player2 = WarPlayer.new(player_2_name)
     deal_cards(starting_deck)
+    @cards_at_stake = []
+  end
+
+  def add_to_stakes(addition_to_stakes)
+    if addition_to_stakes.is_a?(Array)
+      @cards_at_stake.concat(addition_to_stakes)
+    else
+      @cards_at_stake.push(addition_to_stakes)
+    end
   end
 
   def deal_cards(deck)
@@ -36,17 +46,7 @@ class WarGame
 # Assigns a numeric value to each card rank and returns the result of subtracting
 # the first card's value from the second card's value
   def self.get_round_results(winning_player, winner_active_card, cards_at_stake)
-    formatted_cards_at_stake = cards_at_stake.map(&:description)
-    if cards_at_stake.length == 2
-      spoils_of_war = formatted_cards_at_stake.join(" and ")
-    else
-      # Add 'and' between last comma and last card in spoils_of_war
-      spoils_of_war = formatted_cards_at_stake.join(", ")
-      spoils_match = spoils_of_war.match(',[^,]+$')
-      spoils_of_war = "#{spoils_match.pre_match}, and #{formatted_cards_at_stake[-1]}"
-    end
-    return("#{winning_player.name} wins #{spoils_of_war} with "+
-    "#{winner_active_card.description}.")
+
   end
 
 

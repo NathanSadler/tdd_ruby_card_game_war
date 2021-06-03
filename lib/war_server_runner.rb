@@ -7,7 +7,7 @@ while server.games.count != 1
   server.create_game_if_possible
 end
 puts "game started"
-server.create_game_if_possible
+#server.create_game_if_possible
 until(server.get_game(0).winner) do
   server.play_round
 end
