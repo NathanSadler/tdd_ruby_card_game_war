@@ -102,7 +102,18 @@ describe 'WarGame' do
     end
   end
 
-  describe('#get_round_results') do
+  describe('.update_previous_round_report') do
+    it("updates the hash containing information about the previous round") do
+      cards_won = [PlayingCard.new("3", "S"), PlayingCard.new("7", "H")]
+      game.update_previous_round_report(game.player1, cards_won,
+        PlayingCard.new("7", "H"))
+      expect(game.previous_round[:winning_player]).to(eq(game.player1))
+      expect(game.previous_round[:cards_won]).to(eq(cards_won))
+      expect(game.previous_round[:won_with]).to(eq(PlayingCard.new("7", "H")))
+    end
+  end
+
+  describe('.previous_round_report') do
     before(:each) do
       @test_game = WarGame.new("John Doe", "Jane Doe")
       # Clears all cards from both players
@@ -110,17 +121,6 @@ describe 'WarGame' do
       player2_card_count = @test_game.player2.card_count
       player1_card_count.times {@test_game.player1.draw_card}
       player2_card_count.times {@test_game.player2.draw_card}
-    end
-    it('returns a string that describes the result of a round with specified' +
-      ' cards at stake, p1 active card, and p2 active card') do
-      king_card = PlayingCard.new("K", "S")
-      two_card = PlayingCard.new("2", "S")
-      cards_at_stake = [king_card, two_card]
-      winner_active_card = king_card
-      round_message = WarGame.get_round_results(@test_game.player1,
-        winner_active_card, cards_at_stake)
-      expect(round_message).to(eq("John Doe wins King of Spades and 2 of Spades"+
-        " with King of Spades."))
     end
 
     it('returns a message in the format <winner name> wins <card1>, <card2>, '+

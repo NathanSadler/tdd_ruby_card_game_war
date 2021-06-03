@@ -2,7 +2,7 @@ require_relative('card_deck')
 require_relative('war_player')
 class WarGame
   attr_accessor :player1, :player2
-  attr_reader :cards_at_stake
+  attr_reader :cards_at_stake, :previous_round
 
   def initialize(player_1_name=nil, player_2_name=nil, custom_deck=nil)
     starting_deck = CardDeck.new(custom_deck)
@@ -11,6 +11,7 @@ class WarGame
     @player2 = WarPlayer.new(player_2_name)
     deal_cards(starting_deck)
     @cards_at_stake = []
+    @previous_round = {}
   end
 
   def add_to_stakes(addition_to_stakes)
@@ -29,6 +30,12 @@ class WarGame
     else
       return nil
     end
+  end
+
+  def update_previous_round_report(winning_player, cards_won, won_with)
+    @previous_round[:winning_player] = winning_player
+    @previous_round[:cards_won] = cards_won
+    @previous_round[:won_with] = won_with
   end
 
   def deal_cards(deck)
@@ -59,14 +66,13 @@ class WarGame
     end
   end
 
-# Assigns a numeric value to each card rank and returns the result of subtracting
-# the first card's value from the second card's value
-  def self.get_round_results(winning_player, winner_active_card, cards_at_stake)
+
+  def last_round_report(winning_player, winner_active_card, cards_at_stake)
 
   end
 
-
-
+  # Assigns a numeric value to each card rank and returns the result of subtracting
+  # the first card's value from the second card's value
   def self.subtract_card_values(card_1, card_2)
     values = {"A" => 1, "J" => 11, "Q" => 12, "K" => 13}
     (2..10).each do |number|
