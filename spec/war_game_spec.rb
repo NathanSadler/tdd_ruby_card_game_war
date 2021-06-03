@@ -145,21 +145,20 @@ describe 'WarGame' do
   describe('#play_round') do
     before(:each) do
       @test_game = WarGame.new("John Doe", "Jane Doe")
+      @two_spades = PlayingCard.new("2", "S")
+      @king_spades = PlayingCard.new("K", "S")
       # Clears all cards from both players
-      player1_card_count = @test_game.player1.card_count
-      player2_card_count = @test_game.player2.card_count
-      player1_card_count.times {@test_game.player1.draw_card}
-      player2_card_count.times {@test_game.player2.draw_card}
+      [@test_game.player1, @test_game.player2].each {|player| player.clear_deck}
     end
 
     it('gives the player with a higher rank card the cards at play') do
-      @test_game.player1.take_card(PlayingCard.new("K", "S"))
-      @test_game.player2.take_card(PlayingCard.new("2", "S"))
+      @test_game.player1.take_card(@king_spades)
+      @test_game.player2.take_card(@two_spades)
       @test_game.play_round
       expect(@test_game.player1.card_count).to(eq(2))
       expect(@test_game.player2.card_count).to(eq(0))
-      expect(test_results.include?(PlayingCard.new("K", "S"))).to(eq(true))
-      expect(test_results.include?(PlayingCard.new("2", "S"))).to(eq(true))
+      test_results = @test_game.player1.draw_card(2)
+      [@king_spades, @two_spades].each {|card| expect(test_results.include?(card))}
     end
 
     it('declares war even if one of the players has less than 4 cards') do

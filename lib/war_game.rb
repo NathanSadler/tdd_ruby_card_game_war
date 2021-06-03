@@ -88,7 +88,6 @@ class WarGame
   end
 
   def declare_war
-    @cards_at_stake = []
     while player1.active_card.rank == player2.active_card.rank
       [player1, player2].each {|player| add_to_stakes(player.draw_card(4))}
     end
@@ -96,7 +95,13 @@ class WarGame
   end
 
   def play_round
-
+    add_to_stakes([@player1, @player2].map {|player| player.draw_card})
+    if get_player_with_higher_rank_active_card
+      award_cards(@cards_at_stake)
+    else
+      declare_war
+    end
+    @cards_at_stake = []
   end
 
 end
