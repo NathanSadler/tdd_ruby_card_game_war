@@ -8,10 +8,7 @@ class WarGame
     starting_deck.shuffle
     @player1 = WarPlayer.new(player_1_name)
     @player2 = WarPlayer.new(player_2_name)
-    (starting_deck.cards_left / 2).times do
-      @player1.take_card(starting_deck.draw)
-      @player2.take_card(starting_deck.draw)
-    end
+    deal_cards(starting_deck)
   end
 
   def deal_cards(deck)
