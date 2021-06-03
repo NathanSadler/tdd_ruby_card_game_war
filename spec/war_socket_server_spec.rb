@@ -73,13 +73,8 @@ describe WarSocketServer do
 
       #@server.players[0][:client].puts("Hello World")
       @clients[0].provide_input("Hello World")
-      foo = @server.get_text_from_user(@server.players[0][:client])
-      #thr = Thread.new {@server.players[0][:client].puts("Hello World")}
-      #thr.join
-      #print("ZZZZZ #{thr.value}")
-      #@server.players[0][:client].puts("Hello World")
-
-      expect(foo.include?("Hello World")).to(eq(true))
+      text_from_client = @server.get_text_from_user(@server.players[0][:client])
+      expect(text_from_client.include?("Hello World")).to(eq(true))
     end
   end
 

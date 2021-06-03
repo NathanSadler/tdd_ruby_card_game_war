@@ -1,5 +1,6 @@
 require_relative 'war_game'
 require 'socket'
+require_relative 'war_player'
 
 class WarSocketServer
 
@@ -23,7 +24,7 @@ class WarSocketServer
 
   def accept_new_client(player_name = "Random Player")
     client = @server.accept_nonblock
-    @players.push({:client => client, :name => player_name})
+    @players.push({:client => client, :war_player => WarPlayer.new(player_name)})
     # associate player and client
   rescue IO::WaitReadable, Errno::EINTR
     puts "No client to accept"
