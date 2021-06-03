@@ -62,7 +62,7 @@ class WarSocketServer
     end_of_round_message = games[0].play_round
 
     # Delivers end-of-round message to both players
-    @players.map {|player| player[:client].puts(end_of_round_message)}
+    send_message_to_all_clients(end_of_round_message)
   end
 
   def stop
