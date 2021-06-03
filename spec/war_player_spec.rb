@@ -38,6 +38,17 @@ describe 'WarPlayer' do
       expect(player.active_card).to(eq(new_card))
     end
 
+    describe('.has_card?') do
+      let(:test_card) {PlayingCard.new("3", "D")}
+      it('is true if the player has the specified card') do
+        player.take_card(test_card)
+        expect(player.has_card?(test_card)).to(eq(true))
+      end
+      it('is false if the player does not has the specified card') do
+        expect(player.has_card?(test_card)).to(eq(false))
+      end
+    end
+
     it("changes the player's card to the last card drawn if multiple cards are" +
     " drawn") do
       new_cards = [PlayingCard.new("4", "H"), PlayingCard.new("5", "H"),

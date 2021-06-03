@@ -1,5 +1,6 @@
 require_relative '../lib/card_deck'
 require_relative '../lib/playing_card'
+require_relative '../lib/war_player'
 
 describe 'CardDeck' do
   let(:deck) {CardDeck.new}
@@ -55,5 +56,19 @@ describe 'CardDeck' do
     deck.add_card(PlayingCard.new("6", "S"))
     52.times {deck.draw}
     expect(deck.draw.rank).to eq("6")
+  end
+
+  describe('.has_card?') do
+    let(:player) {WarPlayer.new}
+    let(:test_card) {PlayingCard.new("3", "D")}
+    it('is true if the player has the specified card') do
+      deck.cards_left.times {deck.draw}
+      deck.add_card(test_card)
+      expect(deck.has_card?(test_card)).to(eq(true))
+    end
+    it('is false if the player does not has the specified card') do
+      deck.clear
+      expect(deck.has_card?(test_card)).to(eq(false))
+    end
   end
 end

@@ -21,6 +21,40 @@ describe 'WarGame' do
     end
   end
 
+  describe('.deal_cards') do
+    it("equally deals cards between the two players") do
+      starting_deck = [2, 3, 4, 5, 6, 7].map {|rank| PlayingCard.new(rank, "H")}
+      game.deal_cards
+      [game.player1, game.player2].each {|player| expect(player.card_count).to(eq(3))}
+
+    end
+  end
+
+  describe('.declare_war') do
+    before(:each) do
+      @test_game = WarGame.new("John Doe", "Jane Doe")
+      # Clears all cards from both players
+      player1_card_count = @test_game.player1.card_count
+      player2_card_count = @test_game.player2.card_count
+      player1_card_count.times {@test_game.player1.draw_card}
+      player2_card_count.times {@test_game.player2.draw_card}
+    end
+    it('gives the player that wins a war all of the cards being played') do
+      ["2", "3", "4", "5", "6"].map {|rank| @test_game.player1.take_card(PlayingCard.new(rank, "S"))}
+      ["2", "3", "4", "5", "K"].map {|rank| @test_game.player2.take_card(PlayingCard.new(rank, "H"))}
+      @test_game.declare_war
+      expect(@test_game.player1.card_count).to(eq(0))
+      expect(@test_game.player2.card_count).to(eq(10))
+    end
+    it('can declare war multiple times in a row') do
+      ["2", "3", "4", "5", "6", "7", "8", "9", "10"].map {|rank| @test_game.player1.take_card(PlayingCard.new(rank, "S"))}
+      ["2", "3", "4", "5", "6", "7", "8", "9", "K"].map {|rank| @test_game.player2.take_card(PlayingCard.new(rank, "H"))}
+      @test_game.declare_war
+      expect(@test_game.player1.card_count).to(eq(0))
+      expect(@test_game.player2.card_count).to(eq(18))
+    end
+  end
+
   describe('#subtract_card_values') do
     before(:all) do
       @card_a = PlayingCard.new("2", "C")
@@ -107,28 +141,12 @@ describe 'WarGame' do
       expect(test_results.include?(two_card)).to(eq(true))
     end
 
-    it('gives the player that wins a war all of the cards being played') do
-      ["2", "3", "4", "5", "6"].map {|rank| @test_game.player1.take_card(PlayingCard.new(rank, "S"))}
-      ["2", "3", "4", "5", "K"].map {|rank| @test_game.player2.take_card(PlayingCard.new(rank, "H"))}
-      @test_game.play_round
-      expect(@test_game.player1.card_count).to(eq(0))
-      expect(@test_game.player2.card_count).to(eq(10))
-    end
-
     it('declares war even if one of the players has less than 4 cards') do
       ["2", "3", "4", "5", "6"].map {|rank| @test_game.player1.take_card(PlayingCard.new(rank, "S"))}
       ["2", "3", "4", "5"].map {|rank| @test_game.player2.take_card(PlayingCard.new(rank, "H"))}
       @test_game.play_round
       expect(@test_game.player1.card_count).to(eq(9))
       expect(@test_game.player2.card_count).to(eq(0))
-    end
-
-    it('can declare war multiple times in a row') do
-      ["2", "3", "4", "5", "6", "7", "8", "9", "10"].map {|rank| @test_game.player1.take_card(PlayingCard.new(rank, "S"))}
-      ["2", "3", "4", "5", "6", "7", "8", "9", "K"].map {|rank| @test_game.player2.take_card(PlayingCard.new(rank, "H"))}
-      @test_game.play_round
-      expect(@test_game.player1.card_count).to(eq(0))
-      expect(@test_game.player2.card_count).to(eq(18))
     end
   end
 

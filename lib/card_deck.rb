@@ -16,6 +16,10 @@ class CardDeck
     end
   end
 
+  def has_card?(card_to_find)
+    @card_list.include?(card_to_find)
+  end
+
   def cards_left
     @card_list.length
   end

@@ -45,6 +45,8 @@ class WarGame
     "#{winner_active_card.description}.")
   end
 
+
+
   def self.subtract_card_values(card_1, card_2)
     values = {"A" => 1, "J" => 11, "Q" => 12, "K" => 13}
     (2..10).each do |number|
@@ -53,50 +55,14 @@ class WarGame
     values[card_1.rank] - values[card_2.rank]
   end
 
-  def play_round
-    p1_active_card = PlayingCard.new("2", "S")
-    p2_active_card = PlayingCard.new("2", "S")
-    cards_at_stake = []
-    round_winner = ""
-    round_winner_card = ""
-    while p1_active_card.rank == p2_active_card.rank
-      if(player1.card_count > 0)
-        p1_active_card = self.player1.draw_card
-      end
-      if(player2.card_count > 0)
-        p2_active_card = self.player2.draw_card
-      end
-      cards_at_stake.append(p1_active_card, p2_active_card)
-
-      # Randomizes order of cards_at_stake to avoid infinite loops... somehow
-      cards_at_stake.shuffle!
-
-      if WarGame.subtract_card_values(p1_active_card, p2_active_card) > 0
-        cards_at_stake.map {|card| self.player1.take_card(card)}
-        round_winner = player1
-        round_winner_card = p1_active_card
-      elsif WarGame.subtract_card_values(p1_active_card, p2_active_card) < 0
-        cards_at_stake.map {|card| self.player2.take_card(card)}
-        round_winner = player2
-        round_winner_card = p2_active_card
-      else
-
-        # Adds cards from a war to cards_at_stake. If a player only has one card,
-        # it doesn't draw one from them because that card will be their next
-        # active card
-        3.times do
-          [player1, player2].each do |player|
-            if player.card_count > 1
-              cards_at_stake.push(player.draw_card)
-            end
-          end
-        end
-
-      end
+  def declare_war
+    while player1.active_card.rank == player2.active_card.rank
+      [player1, player2].each {|player| player.draw_card(4)}
     end
-    # Prints which player won what cards this round
-    puts(WarGame.get_round_results(round_winner, round_winner_card, cards_at_stake))
-    WarGame.get_round_results(round_winner, round_winner_card, cards_at_stake)
+  end
+
+  def play_round
+
   end
 
 end
