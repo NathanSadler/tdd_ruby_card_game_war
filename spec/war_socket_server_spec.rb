@@ -152,6 +152,23 @@ describe WarSocketServer do
     end
   end
 
+  describe("accept_new_client") do
+    it("adds a waiting client to its list of players") do
+      @server.start
+      connect_client(@server, "foobar", @clients)
+      expect(@server.players.length).to(eq(1))
+    end
+  end
+
+  describe("create_game_if_possible") do
+    it("creates a game when there are two unmatched players") do
+      @server.start
+      2.times {connect_client(@server, "foobar", @clients)}
+      @server.create_game_if_possible
+      expect(@server.games.length).to(eq(1))
+    end
+  end
+
   # Add more tests to make sure the game is being played
   # For example:
   #   make sure the mock client gets appropriate output

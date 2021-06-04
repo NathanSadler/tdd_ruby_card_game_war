@@ -74,10 +74,10 @@ class WarSocketServer
     if @players.length == 2
       games.push(WarGame.new("Player 1", "Player 2"))
       # Assigns players to clients
-      players[0][:war_player] = games[-1].player1
-      players[0][:game_id] = games.length - 1
-      players[1][:war_player] = games[-1].player2
-      players[1][:game_id] = games.length - 1
+      players[-1][:war_player] = games[-1].player1
+      players[-1][:game_id] = games.length - 1
+      players[-2][:war_player] = games[-1].player2
+      players[-2][:game_id] = games.length - 1
     end
   end
 
