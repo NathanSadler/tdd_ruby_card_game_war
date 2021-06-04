@@ -27,9 +27,9 @@ class WarSocketServer
     @server = TCPServer.new(port_number)
   end
 
-  def accept_new_client(player_name = "Random Player")
+  def accept_new_client(player_name = "Random Player", war_socket=nil)
     client = @server.accept_nonblock
-    @players.push({:client => client, :id => @@player_counter})
+    @players.push({:client => client, :war_socket => war_socket, :id => @@player_counter})
     @@player_counter += 1
     # associate player and client
   rescue IO::WaitReadable, Errno::EINTR
@@ -46,6 +46,7 @@ class WarSocketServer
     @players.each do |player|
       if player[:game_id] == game_id
         player[:client].puts(message)
+        player[:war_socket].foobar
       end
     end
   end
