@@ -185,5 +185,11 @@ describe WarSocketServer do
       @server.play_round
       expect(@clients[0].capture_output.include?(" won ")).to(eq(true))
     end
+
+    it("doesn't play a round for games other than the one that was specified") do
+      @server.start
+      2.times {connect_client(@server, "player_name", @clients)}
+    end
+
   end
 end

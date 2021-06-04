@@ -97,7 +97,7 @@ class WarSocketServer
     end_of_round_message = games[game_index].play_round
 
     # Delivers end-of-round message to both players
-    send_message_to_all_clients(end_of_round_message)
+    send_message_to_players_in_game(game_index, end_of_round_message)
   end
 
   def draw_card_from_player(id)
