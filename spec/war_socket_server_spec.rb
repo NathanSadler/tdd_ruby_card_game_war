@@ -175,11 +175,13 @@ describe WarSocketServer do
   #   make sure the next round isn't played until both clients say they are ready to play
   #   ...
   describe('.play_round') do
-    it('plays a round when both players are ready') do
+    before(:each) do
       @server.start
-      # server, player_name, client_list
       ["Player 1", "Player 2"].each {|player_name| connect_client(@server, player_name, @clients)}
       @server.create_game_if_possible
+    end
+    it('plays a round when both players are ready') do
+      # server, player_name, client_list
       @clients[0].provide_input("ready")
       @clients[1].provide_input("ready")
       @server.play_round
@@ -187,9 +189,29 @@ describe WarSocketServer do
     end
 
     it("doesn't play a round for games other than the one that was specified") do
-      @server.start
-      2.times {connect_client(@server, "player_name", @clients)}
+      2.times {connect_client(@server, "test_name", @clients)}
+      @server.create_game_if_possible
+      @clients[0].provide_input("ready")
+      @clients[1].provide_input("ready")
+
+      #@server.play_round
+      #expect(@clients[0].capture_output.include?(" won ")).to(eq(true))
+      #expect(@server.games[1].player1.card_count).to(eq(26))
     end
 
+  end
+
+  describe('list_players_in_game') do
+    before(:each) do
+      @server.start
+      ["Player 1", "Player 2"].each {|player_name| connect_client(@server, player_name, @clients)}
+      @server.create_game_if_possible
+    end
+    it('returns an array of each player in the game with game_id') do
+      connect_client(@server, "test_name", @clients)
+      @server.create_game_if_possible
+      test_results = @server.list_players_in_game(0).map {|player| player[:war_socket]}
+      expect(test_results.include?(@clients[0])).to(eq(true))
+    end
   end
 end

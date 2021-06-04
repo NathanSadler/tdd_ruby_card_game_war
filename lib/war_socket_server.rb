@@ -46,7 +46,6 @@ class WarSocketServer
     @players.each do |player|
       if player[:game_id] == game_id
         player[:client].puts(message)
-        player[:war_socket].foobar
       end
     end
   end
@@ -67,6 +66,11 @@ class WarSocketServer
         return text_from_user
       end
     end
+  end
+
+  def list_players_in_game(game_index)
+    players_in_game = players.select {|player| player[:game_id] == game_index}
+    return players_in_game
   end
 
   def create_game_if_possible
