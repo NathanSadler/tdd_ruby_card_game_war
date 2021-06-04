@@ -193,10 +193,9 @@ describe WarSocketServer do
       @server.create_game_if_possible
       @clients[0].provide_input("ready")
       @clients[1].provide_input("ready")
-
-      #@server.play_round
-      #expect(@clients[0].capture_output.include?(" won ")).to(eq(true))
-      #expect(@server.games[1].player1.card_count).to(eq(26))
+      @server.play_round
+      expect(@clients[0].capture_output.include?(" won ")).to(eq(true))
+      expect(@server.games[1].player1.card_count).to(eq(26))
     end
 
   end

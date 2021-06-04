@@ -75,7 +75,7 @@ class WarSocketServer
 
   def create_game_if_possible
     # Check how many clients there are (there need to be 2)
-    if @players.length == 2
+    if ((players.length % 2) == 0)
       games.push(WarGame.new("Player 1", "Player 2"))
       # Assigns players to clients
       players[-1][:war_player] = games[-1].player1
@@ -87,7 +87,7 @@ class WarSocketServer
 
   # Plays a game until one player wins
   def play_full_game(game_index=0)
-    until @games[game_index].winner
+    until games[game_index].winner
       play_round(game_index)
     end
   end
