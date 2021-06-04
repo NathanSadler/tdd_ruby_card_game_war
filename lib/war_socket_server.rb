@@ -73,7 +73,7 @@ class WarSocketServer
   def play_round
     # Waits for each player to say 'ready'
     send_message_to_all_clients("enter 'ready' to play the next round")
-    @players.map {|player| wait_for_specific_message('ready', player[:client])}
+    @players.each {|player| wait_for_specific_message('ready', player[:client])}
 
     # Plays the round
     end_of_round_message = games[0].play_round

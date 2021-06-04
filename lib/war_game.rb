@@ -87,21 +87,23 @@ class WarGame
     values[card_1.rank] - values[card_2.rank]
   end
 
+  # This was initially supposed to be just for tiebreakers, but the way things
+  # worked out let me use it for both ties and non-ties, although I suspect
+  # it might come back to haunt me
   def declare_war
     while player1.active_card.rank == player2.active_card.rank
       [player1, player2].each {|player| add_to_stakes(player.draw_card(4))}
     end
     award_cards(@cards_at_stake)
+    update_previous_round_report(get_player_with_higher_rank_active_card,
+    @cards_at_stake, get_player_with_higher_rank_active_card.active_card)
   end
 
   def play_round
     add_to_stakes([@player1, @player2].map {|player| player.draw_card})
-    if get_player_with_higher_rank_active_card
-      award_cards(@cards_at_stake)
-    else
-      declare_war
-    end
+    declare_war
     @cards_at_stake = []
+    get_previous_round_report_message
   end
 
 end

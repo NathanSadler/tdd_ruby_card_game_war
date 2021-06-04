@@ -142,17 +142,18 @@ describe WarSocketServer do
   describe('.play_round') do
     it('plays a round when both players are ready') do
       @server.start
-      client1 = MockWarSocketClient.new(@server.port_number)
+      client1 = WarSocketClient.new(@server.port_number)
       @clients.push(client1)
       @server.accept_new_client("Player 1")
-      client2 = MockWarSocketClient.new(@server.port_number)
+      client2 = WarSocketClient.new(@server.port_number)
       @clients.push(client2)
       @server.accept_new_client("Player 2")
       @server.create_game_if_possible
-      @clients[0].provide_input("ready")
-      @clients[1].provide_input("ready")
+      @clients.each {|client| client.provide_input("ready")}
       @server.play_round
-      expect(@clients[0].capture_output.include?(" wins ")).to(eq(true))
+      # what = @clients[0].capture_output
+      # print(what)
+      expect(@clients[1].capture_output.include?(" won ")).to(eq(true))
     end
   end
 end
