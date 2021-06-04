@@ -4,6 +4,12 @@ require_relative '../lib/war_socket_client'
 require_relative '../lib/playing_card'
 
 # Remember, this is just for testing.
+def connect_client(server, player_name, client_list)
+  client = WarSocketClient.new(server.port_number)
+  client_list.push(client)
+  server.accept_new_client(player_name)
+end
+
 class MockWarSocketClient
   attr_reader :socket
   attr_reader :output
@@ -130,8 +136,20 @@ describe WarSocketServer do
     @clients.push(client2)
     @server.accept_new_client("Player 2")
     @server.send_message_to_all_clients("Hello World")
-    expect(@clients[0].capture_output.include?("Hello World"))
-    expect(@clients[1].capture_output.include?("Hello World"))
+    expect(@clients[0].capture_output.include?("Hello World")).to(eq(true))
+    expect(@clients[1].capture_output.include?("Hello World")).to(eq(true))
+  end
+
+  describe("send_message_to_players_in_game") do
+    it('sends a message to the players in a game') do
+      @server.start
+      2.times{ connect_client(@server,"b", @clients)}
+      @server.create_game_if_possible
+      connect_client(@server, "3", @clients)
+      @server.send_message_to_players_in_game(0, "this is just for you")
+      expect(@clients[0].capture_output.include?("this is just for you")).to(eq(true))
+      expect(@clients[2].capture_output.include?("this is just for you")).to(eq(false))
+    end
   end
 
   # Add more tests to make sure the game is being played
@@ -142,18 +160,13 @@ describe WarSocketServer do
   describe('.play_round') do
     it('plays a round when both players are ready') do
       @server.start
-      client1 = WarSocketClient.new(@server.port_number)
-      @clients.push(client1)
-      @server.accept_new_client("Player 1")
-      client2 = WarSocketClient.new(@server.port_number)
-      @clients.push(client2)
-      @server.accept_new_client("Player 2")
+      # server, player_name, client_list
+      ["Player 1", "Player 2"].each {|player_name| connect_client(@server, player_name, @clients)}
       @server.create_game_if_possible
-      @clients.each {|client| client.provide_input("ready")}
+      @clients[0].provide_input("ready")
+      @clients[1].provide_input("ready")
       @server.play_round
-      # what = @clients[0].capture_output
-      # print(what)
-      expect(@clients[1].capture_output.include?(" won ")).to(eq(true))
+      expect(@clients[0].capture_output.include?(" won ")).to(eq(true))
     end
   end
 end

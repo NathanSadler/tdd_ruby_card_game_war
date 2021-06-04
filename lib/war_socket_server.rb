@@ -42,6 +42,14 @@ class WarSocketServer
     end
   end
 
+  def send_message_to_players_in_game(game_id, message)
+    @players.each do |player|
+      if player[:game_id] == game_id
+        player[:client].puts(message)
+      end
+    end
+  end
+
   # Pauses until it gets any text input from a specified client
   def get_text_from_user(client, prompt="")
     sleep(0.1)
@@ -65,18 +73,27 @@ class WarSocketServer
     if @players.length == 2
       games.push(WarGame.new("Player 1", "Player 2"))
       # Assigns players to clients
-      players[0][:war_player] = games[0].player1
-      players[1][:war_player] = games[0].player2
+      players[0][:war_player] = games[-1].player1
+      players[0][:game_id] = games.length - 1
+      players[1][:war_player] = games[-1].player2
+      players[1][:game_id] = games.length - 1
     end
   end
 
-  def play_round
+  # Plays a game until one player wins
+  def play_full_game(game_index=0)
+    until @games[game_index].winner
+      play_round(game_index)
+    end
+  end
+
+  def play_round(game_index = 0)
     # Waits for each player to say 'ready'
     send_message_to_all_clients("enter 'ready' to play the next round")
     @players.each {|player| wait_for_specific_message('ready', player[:client])}
 
     # Plays the round
-    end_of_round_message = games[0].play_round
+    end_of_round_message = games[game_index].play_round
 
     # Delivers end-of-round message to both players
     send_message_to_all_clients(end_of_round_message)

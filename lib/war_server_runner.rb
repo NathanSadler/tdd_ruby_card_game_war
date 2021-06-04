@@ -8,7 +8,4 @@ while server.games.count != 1
 end
 puts "game started"
 #server.create_game_if_possible
-until(server.get_game(0).winner) do
-  server.play_round
-end
-print('ah')
+server.play_full_game(0)
