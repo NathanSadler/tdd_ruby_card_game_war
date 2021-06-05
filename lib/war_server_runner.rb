@@ -2,10 +2,13 @@ require_relative 'war_socket_server'
 
 server = WarSocketServer.new()
 server.start
-while server.games.count != 1
+while true
   server.accept_new_client
-  server.create_game_if_possible
+  if server.create_game_if_possible
+    game_id = server.games.length - 1
+    Thread.new(game_id) {|game_id| server.play_full_game(game_id)}
+  end
 end
 puts "game started"
 #server.create_game_if_possible
-server.play_full_game(0)
+server.play_full_game()
