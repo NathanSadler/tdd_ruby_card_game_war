@@ -69,6 +69,15 @@ describe WarSocketServer do
     expect {MockWarSocketClient.new(@server.port_number)}.to raise_error(Errno::ECONNREFUSED)
   end
 
+  describe('set_player_game_id') do
+    it("sets the game id of one of it's players") do
+      @server.start
+      connect_client(@server, "player name", @clients)
+      @server.set_player_game_id(0, 1)
+      expect(@server.players[0][:game_id]).to(eq(1))
+    end
+  end
+
   it "accepts new clients and starts a game if possible" do
     @server.start
     client1 = MockWarSocketClient.new(@server.port_number)

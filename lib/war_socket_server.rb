@@ -68,6 +68,11 @@ class WarSocketServer
     end
   end
 
+  def set_player_game_id(player_id, new_game_id)
+    selected_player = players.select {|player| player[:id] == player_id}[0]
+    selected_player.store(:game_id, new_game_id)
+  end
+
   def list_players_in_game(game_index)
     players_in_game = players.select {|player| player[:game_id] == game_index}
     return players_in_game
