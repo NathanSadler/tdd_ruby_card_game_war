@@ -84,9 +84,8 @@ class WarSocketServer
       games.push(WarGame.new("Player 1", "Player 2"))
       # Assigns players to clients
       players[-1][:war_player] = games[-1].player1
-      players[-1][:game_id] = games.length - 1
       players[-2][:war_player] = games[-1].player2
-      players[-2][:game_id] = games.length - 1
+      [players[-1][:id], players[-2][:id]].each {|player_id| set_player_game_id(player_id, games.length - 1)}
     end
   end
 
