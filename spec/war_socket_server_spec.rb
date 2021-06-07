@@ -121,7 +121,6 @@ describe WarSocketServer do
     2.times {connect_client(@server, "player name", @clients)}
     @server.send_message_to_all_clients("Hello World")
     expect(@clients[0].capture_output.include?("Hello World")).to(eq(true))
-    #expect(@server.players[0][:client].capture_output.include?("Hello World")).to(eq(true))
     expect(@clients[1].capture_output.include?("Hello World")).to(eq(true))
   end
 

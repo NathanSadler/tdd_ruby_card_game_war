@@ -33,7 +33,7 @@ class WarSocketServer
     @@player_counter += 1
     # associate player and client
   rescue IO::WaitReadable, Errno::EINTR
-    #puts "No client to accept"
+    puts "No client to accept"
   end
 
   def send_message_to_all_clients(message)
